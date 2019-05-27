@@ -9,13 +9,13 @@
  *
  * For more information, see
  * http://interconnectit.com/124/search-and-replace-for-wordpress-databases/
- * https://ingnrcs.tech/script-reemplazador/
+ * https://ingnrcs.tech/Script-Reemplazador-PHP/
  *
  * To contribute Original source go to
  * http://github.com/interconnectit/search-replace-db
  * 
  * To Optimized Version go to
- * https://github.com/ingnrcs/script-reemplazador
+ * https://github.com/ingnrcs/Script-Reemplazador-PHP
  *
  * To use, load the script on your server and point your web browser to it.
  * In some situations, consider using the command line interface version.
