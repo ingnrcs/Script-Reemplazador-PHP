@@ -2390,41 +2390,35 @@ class icit_srdb_ui extends icit_srdb {
 												.find( '[data-report="dry_run"]' ).html( strings.updates ).end()
 												.prependTo( $report );
 										}
-
 										$( '.main-report' )
 											.find( '[data-report="tables"]' ).html( t.tables ).end()
 											.find( '[data-report="rows"]' ).html( t.rows ).end()
 											.find( '[data-report="changes"]' ).html( t.changes ).end()
 											.find( '[data-report="updates"]' ).html( t.updates ).end()
 											.find( '[data-report="time"]' ).html( t.time.toFixed( 7 ) ).end();
-
 										if ( ! $table_reports.length )
 											$table_reports = $( '\
 									<table class="table-reports">\
 										<thead>\
 											<tr>\
-												<th>Tablas</th>\
-												<th>Filas</th>\
-												<th>Celdas Cambiadas</th>\
-												<th>Actualizaciones</th>\
-												<th>Segundos</th>\
+												<th>Table</th>\
+												<th>Rows</th>\
+												<th>Cells changed</th>\
+												<th>Updates</th>\
+												<th>Seconds</th>\
 											</tr>\
 										</thead>\
 										<tbody></tbody>\
 									</table>' ).appendTo( $report );
-
 										$.each( report.table_reports, function( table, table_report ) {
-
 											var $view_changes = '',
 												changes_length = table_report.changes.length;
-
 											if ( changes_length ) {
-												$view_changes = $( '<a href="#" title="Ver el primero ' + changes_length + ' modificaciones">ver cambios</a>' )
+												$view_changes = $( '<a href="#" title="View the first ' + changes_length + ' modifications">view changes</a>' )
 													.data( 'report', table_report )
 													.data( 'table', table )
 													.click( t.changes_overlay );
 											}
-
 											$( '<tr class="' + table + '">' + t.table_report_tpl + '</tr>' )
 												.hide()
 												.find( '[data-report="table"]' ).html( table ).end()
@@ -2434,23 +2428,16 @@ class icit_srdb_ui extends icit_srdb {
 												.find( '[data-report="time"]' ).html( t.get_time( start, end ).toFixed( 7 ) ).end()
 												.appendTo( $table_reports.find( 'tbody' ) )
 												.fadeIn( 150 );
-
 										} );
-
 										$.extend( true, t.report, report );
-
 										// fetch next table
 										t.recursive_fetch_json( data, ++i );
-
 									} else if ( report.engine ) {
-
 										var $row = $( '.row-results' ),
 											$report = $row.find( '.report' ),
 											$table_reports = $row.find( '.table-reports' );
-
 										if ( ! $report.length )
 											$report = $( '<div class="report"></div>' ).appendTo( $row );
-
 										if ( ! $table_reports.length )
 											$table_reports = $( '\
 									<table class="table-reports">\
@@ -2462,32 +2449,23 @@ class icit_srdb_ui extends icit_srdb {
 										</thead>\
 										<tbody></tbody>\
 									</table>' ).appendTo( $report );
-
 										$.each( report.converted, function( table, converted ) {
-
 											$( '<tr class="' + table + '"><td>' + table + '</td><td>' + report.engine + '</td></tr>' )
 												.hide()
 												.prependTo( $table_reports.find( 'tbody' ) )
 												.fadeIn( 150 );
-
 											$( '.table-select option[value="' + table + '"]' ).html( function(){
 												return $( this ).html().replace( new RegExp( table + ': [^,]+' ), table + ': ' + report.engine );
 											} );
-
 										} );
-
 										// fetch next table
 										t.recursive_fetch_json( data, ++i );
-
 									} else if ( report.collation ) {
-
 										var $row = $( '.row-results' ),
 											$report = $row.find( '.report' ),
 											$table_reports = $row.find( '.table-reports' );
-
 										if ( ! $report.length )
 											$report = $( '<div class="report"></div>' ).appendTo( $row );
-
 										if ( ! $table_reports.length )
 											$table_reports = $( '\
 									<table class="table-reports">\
@@ -2500,9 +2478,7 @@ class icit_srdb_ui extends icit_srdb {
 										</thead>\
 										<tbody></tbody>\
 									</table>' ).appendTo( $report );
-
 										$.each( report.converted, function( table, converted ) {
-
 											$( '\
 											<tr class="' + table + '">\
 												<td>' + table + '</td>\
@@ -2512,36 +2488,24 @@ class icit_srdb_ui extends icit_srdb {
 												.hide()
 												.appendTo( $table_reports.find( 'tbody' ) )
 												.fadeIn( 150 );
-
 											$( '.table-select option[value="' + table + '"]' ).html( function(){
 												return $( this ).html().replace( new RegExp( 'collation: .*?$' ), 'collation: ' + report.collation );
 											} );
-
 										} );
-
 										// fetch next table
 										t.recursive_fetch_json( data, ++i );
-
 									} else {
-
 										console.log( 'no report' );
 										t.complete();
-
 									}
-
 								} else {
-
 									console.log( 'no response' );
 									t.complete();
-
 								}
-
 								// remember previous request
 								t.prev_data = $.extend( {}, data );
-
 								return true;
 							}
-
 							return $.ajax( {
 								url: window.location.href,
 								data: post_data,
@@ -2554,15 +2518,15 @@ class icit_srdb_ui extends icit_srdb {
 									else {
 										// handle error
 										alert(
-											'La secuencia de comandos encontró un error al ejecutar una solicitud AJAX.\
+											'The script encountered an error while running an AJAX request.\
 											\
-											Si está utilizando su archivo de hosts para asignar un dominio, intente navegar directamente a través de la dirección IP.\
+											If you are using your hosts file to map a domain try browsing via the IP address directly.\
 											\
-											Si aún tiene problemas, le recomendamos que pruebe la secuencia de comandos CLI incluida con este paquete. \Ver el archivo README para más detalles..'
+											If you are still running into problems we recommend trying the CLI script bundled with this package.\
+											See the README for details.'
 										);
-
 										try {
-											process_response({errors:{db:['La secuencia de comandos encontró un error al ejecutar una solicitud AJAX.']}});
+											process_response({errors:{db:['The script encountered an error while running an AJAX request.']}});
 										} catch (e) {
 											// We're not interested in the nuts and bolts.
 											// Squelch exceptions and just use process_response to print a generic error.
@@ -2575,9 +2539,7 @@ class icit_srdb_ui extends icit_srdb {
 									process_response( data );
 								}
 							} );
-
 						},
-
 						get_time: function( start, end ) {
 							start 	= start || 0.0;
 							end 	= end 	|| 0.0;
@@ -2586,10 +2548,8 @@ class icit_srdb_ui extends icit_srdb {
 							var diff = end - start;
 							return parseFloat( diff < 0.0 ? 0.0 : diff );
 						},
-
 						changes_overlay: function( e ) {
 							e.preventDefault();
-
 							var $overlay = $( '.changes-overlay' ),
 								table = $( this ).data( 'table' ),
 								report = $( this ).data( 'report' )
@@ -2601,9 +2561,8 @@ class icit_srdb_ui extends icit_srdb {
 								regex_m = $( '[name="regex_m"]' ).is( ':checked' ),
 								regex_search_iter = new RegExp( search, 'g' + ( regex_i ? 'i' : '' ) + ( regex_m ? 'm' : '' ) ),
 								regex_search = new RegExp( search, 'g' + ( regex_i ? 'i' : '' ) + ( regex_m ? 'm' : '' ) );
-
 							if ( ! $overlay.length ) {
-								$overlay = $( '<div class="changes-overlay"><div class="overlay-header"><a class="close" href="#close">&times; Cerrar</a><h1></h1></div><div class="changes"></div></div>' )
+								$overlay = $( '<div class="changes-overlay"><div class="overlay-header"><a class="close" href="#close">&times; Close</a><h1></h1></div><div class="changes"></div></div>' )
 									.hide()
 									.find( '.close' )
 									.click( function( e ) {
@@ -2620,11 +2579,9 @@ class icit_srdb_ui extends icit_srdb {
 									}
 								} );
 							}
-
 							$( 'body' ).css( { overflow: 'hidden' } );
-
 							$overlay
-								.find( 'h1' ).html( table + ' <small>Mostrando los primeros 20 cambios</small>' ).end()
+								.find( 'h1' ).html( table + ' <small>Showing first 20 changes</small>' ).end()
 								.find( '.changes' ).html( '' ).end()
 								.fadeIn( 300 )
 								.find( '.changes' ).html( function() {
@@ -2709,15 +2666,11 @@ class icit_srdb_ui extends icit_srdb {
 									} );
 									$( this ).scrollTop( 0 );
 								} ).end();
-
 						},
-
 						onunload: function() {
 							return window.confirm( t.running ? t.confirm_strings.unload_running : t.confirm_strings.unload_default );
 						},
-
 						fetch_products: function() {
-
 							// fetch products feed from interconnectit.com
 							var $products,
 								tpl = '\
@@ -2728,11 +2681,112 @@ class icit_srdb_ui extends icit_srdb {
 								<div class="product-description">{{content}}</div>\
 							</a>\
 						</div>';
-
+							// get products as jsonp
+							$.ajax( {
+								type: 'GET',
+								url: 'http://products.network.interconnectit.com/api/core/get_posts/',
+								data: { order: 'ASC', orderby: 'menu_order title' },
+								dataType: 'jsonp',
+								jsonpCallback: 'show_products',
+								contentType: 'application/json',
+								success: function( products ) {
+									$products = $( '.row-products .content' ).html( '' );
+									$.each( products.posts, function( i, product ) {
+										// run template replacement
+										$products.append( tpl.replace( /{{([a-z\.\[\]0-9_]+)}}/g, function( match, p1, offset, search ) {
+											return typeof eval( 'product.' + p1 ) != 'undefined' ? eval( 'product.' + p1 ) : '';
+										} ) );
+									} );
+								},
+								error: function(e) {
+								}
+							} );
+						},
+						fetch_blogs: function() {
+							// fetch products feed from interconnectit.com
+							var $blogs,
+								tpl = '\
+						<div class="blog">\
+							<a href="{{url}}" title="Link opens in new tab" target="_blank">\
+								<h2>{{title}}</h2>\
+								<div class="date">{{date}}</div>\
+								<div class="categories">Filed under: {{categories}}</div>\
+							</a>\
+						</div>';
+							// get products as jsonp
+							$.ajax( {
+								type: 'GET',
+								url: 'http://interconnectit.com/api/core/get_posts/',
+								data: { count: 3, category__not_in: [ 216 ] },
+								dataType: 'jsonp',
+								jsonpCallback: 'show_blogs',
+								contentType: 'application/json',
+								success: function( blogs ) {
+									$blogs = $( '.row-blog .content' ).html( '' );
+									$.each( blogs.posts, function( i, blog ) {
+										// run template replacement
+										$blogs.append( tpl.replace( /{{([a-z\.\[\]0-9_]+)}}/g, function( match, p1, offset, search ) {
+											var value = typeof eval( 'blog.' + p1 ) != 'undefined' ? eval( 'blog.' + p1 ) : '';
+											if ( p1 == 'date' )
+												value = new Date( value ).toDateString();
+											if ( p1 == 'categories' )
+												value = $.map( value, function( category, i ){ return category.title; } ).join( ', ' );
+											return value;
+										} ) );
+									} );
+								},
+								error: function(e) {
+								}
+							} );
+						},
+						mailchimp: function( e ) {
+							e.preventDefault();
+							var $this = $( this ),
+								$form = $this.is( 'form' ) ? $this : $this.parents( 'form' ),
+								$button = $form.find( 'input[type="submit"]' ).addClass( 'active' ),
+								action = $form.attr( 'action' ).replace( /subscribe\/post$/, 'subscribe/post-json' );
+							// remove errors
+							$( '.row-subscribe .errors' ).remove();
+							// get response from mailchimp
+							$.ajax( {
+								type: 'GET',
+								url: action,
+								data: $form.serialize() + '&c=?',
+								dataType: 'json',
+								success: function( response ) {
+									if ( response && response.result == 'success' ) {
+										$form.find( '>*' ).fadeOut( 150, function() {
+											$form.html( '' );
+											$( '<div class="content"><p class="thanks">Success! We didn&rsquo;t think it was possible but now we like you even more!</p></div>' )
+												.hide()
+												.insertAfter( $form )
+												.fadeIn( 300 );
+											$form.remove();
+										} );
+									}
+									if ( response && response.result != 'success' ) {
+										$( '<div class="errors"><p>Computer says no&hellip; Can you check you&rsquo;ve filled in the email address field correctly?</p></div>' )
+											.hide()
+											.insertAfter( '.row-subscribe h1' )
+											.fadeIn( 200 );
+									}
+								},
+								complete: function() {
+									$button.removeClass( 'active' );
+								}
+							} );
+						}
+					} );
+					// constructor
+					t.init();
+					return t;
+				}
+				// load on ready
+				$( document ).ready( srdb );
+			})(jQuery);
+		</script>
 	<?php
 	}
-
 }
-
 // initialise
 new icit_srdb_ui();
